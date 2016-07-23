@@ -1,15 +1,20 @@
-# Config file for automatic testing at travis-ci.org
 language: python
-
 env:
-    - TOXENV=flake8
-    - TOXENV=doc
-    - TOXENV=py27
-    - TOXENV=py33
-    - TOXENV=py34
-
+- TOXENV=flake8
+- TOXENV=doc
+- TOXENV=py27
+- TOXENV=py33
+- TOXENV=py34
 install:
-    - pip install tox
-
+- pip install tox
 script:
-    - tox -e $TOXENV
+- tox -e $TOXENV
+deploy:
+  provider: pypi
+  user: beylsp
+  password:
+    secure: fHbKMHw15c9E19i3K8LV8xJkzJVcS+AozPyYvBK7lC0DRi9k/iDqMtNtVvK3XFbRtN4RYgHocP5wP82ryxdQfxLDck0gGqHfm4HyAMfhOR9HlhzocoKG/xtgH0VeukQ2gCAR0/OY5d41zj/RGy3EVSSOOrzvDns+ztKjlC7VxevfW/2tJYBXRcUqPMqjVTTAE2zH8jZdOrDmfzE3Hq33rWxNZHw1NhEwvRwUvOxSTgGYRF35FYmbBnbZnJuJSHinik0Ln/oPmwCwRSX3IjrfVI5tx8cGT3CqPFp6l0uF0o3bT0HT1KnyUqoT2iOj7D982euRjWGtAphV7s7UlwglGCTNgv5V1r0LVgj/U9HdZ54ZRvLPfUDErp727N6Xa9kb6uMAFJQN9yf+f9g05oN6q+mrDGPph6eAO/laJbB//Ub91bB75vxs3ilrJmjbUl8hfLZeAtr6t7xx35djaDATGtLnH5qRRE4TYyqzUbhMtLHmHbRCZE3h+lRIPgdNr0trG3nsHAkckC9bxaB3LF4umO+3iLMEdPfJd4PNL/56H4xgN22B4E92HZIptH1Ga04V6DIuZb8RoSRPjEr+iLMxslE25Jmu4Q7tKaAAMQemLC21BDUxe+HadeMG5Kf5qqumWOmGk/5/0qU/gPLDQQ2xFoDxsbD0LSnzaDmNRyJa5xs=
+  on:
+    tags: true
+    distributions: sdist bdist_wheel
+    repo: beylsp/proxy-toggle
