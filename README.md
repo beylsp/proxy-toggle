@@ -1,4 +1,7 @@
 # proxy-toggle
+
+[![Build Status](https://travis-ci.org/beylsp/proxy-toggle.svg?branch=master)](https://travis-ci.org/beylsp/proxy-toggle)
+
 A command-line tool to run programs seamlessly behind a proxy.
 
 ## Introduction
