@@ -3,7 +3,7 @@ A command-line tool to run programs seamlessly behind a proxy.
 
 ## Introduction
 
-Many corporate networks use proxies both for network protection and to cache often-used content. This command-line tool allows its users to run programs behind a corporate proxy without the need to constantly set/unset proxy environment variables. It sets the environment variables only when needed and unsets them whenever the program finished its execution.
+Many corporate networks use proxies both for network protection and to cache often-used content. This command-line tool allows you to run programs behind a corporate proxy without the need to constantly set/unset proxy environment variables. It sets the environment variables only when needed and unsets them whenever the program finished its execution.
 
 ## Installation
 
@@ -36,7 +36,7 @@ After successful initialization, run:
 $ px <program>
 ```
 
-If your proxy does not require user authentication, run:
+If your proxy doesn't require user authentication, run it with `--nouser` option:
 
 ```
 $ px --nouser <program>
@@ -49,3 +49,7 @@ $ px git clone https://github.com/beylsp/proxy-toggle
 
 $ px --nouser wget http://github.com/beylsp/archive/master.zip
 ```
+
+## Contributing
+
+We love contributions. If you've found a bug in the tool or would like new features added, go ahead and open issues or pull requests against this repo. Write a test to show your bug was fixed or the feature works as expected.
