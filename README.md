@@ -1,6 +1,7 @@
 # proxy-toggle
 
 [![Build Status](https://travis-ci.org/beylsp/proxy-toggle.svg?branch=master)](https://travis-ci.org/beylsp/proxy-toggle)
+[![Coverage Status](https://coveralls.io/repos/github/beylsp/proxy-toggle/badge.svg?branch=master)](https://coveralls.io/github/beylsp/proxy-toggle?branch=master)
 
 A command-line tool to run programs seamlessly behind a proxy.
 
