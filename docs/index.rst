@@ -47,8 +47,10 @@ After successful initialization, run:
 
     $ px <program>
 
+.. role:: bash(code)
+   :language: bash
 
-If your proxy doesn't require user authentication, run it with `--nouser` option:
+If your proxy doesn't require user authentication, run it with :bash:`--nouser` option:
 
 .. code-block:: bash
 
