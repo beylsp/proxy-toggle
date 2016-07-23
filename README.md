@@ -47,7 +47,7 @@ $ px --nouser <program>
 ```
 $ px git clone https://github.com/beylsp/proxy-toggle
 
-$ px --nouser wget http://github.com/beylsp/archive/master.zip
+$ px --nouser wget https://github.com/beylsp/archive/master.zip
 ```
 
 ## Contributing
