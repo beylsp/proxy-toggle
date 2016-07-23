@@ -1,0 +1,8 @@
+coveralls
+flake8
+mock
+nose2
+nose2-cov==1.0a4
+sphinx
+sphinx-rtd-theme
+tox
