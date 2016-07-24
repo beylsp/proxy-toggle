@@ -6,11 +6,8 @@ env:
 - TOXENV=py27
 - TOXENV=py33
 - TOXENV=py34
-before_install:
-- sudo apt-get -qq update
-- sudo apt-get install -y pandoc
 install:
-- pip install tox pypandoc
+- pip install tox
 script:
 - tox -e $TOXENV
 deploy:

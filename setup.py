@@ -1,15 +1,20 @@
-import pypandoc
-
 try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
 
 
-readme = pypandoc.convert('README.md', 'rst')
-history = pypandoc.convert('HISTORY.md', 'rst')
+with open('README.md') as readme_file:
+    readme = readme_file.read()
+
+
+with open('HISTORY.md') as history_file:
+    history = history_file.read()
+
 
 requirements = ['gnupg']
+
+
 test_requirements = []
 
 
