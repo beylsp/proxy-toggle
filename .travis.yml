@@ -1,4 +1,5 @@
 language: python
+sudo: required
 env:
 - TOXENV=flake8
 - TOXENV=doc
