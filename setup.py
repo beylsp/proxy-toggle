@@ -1,5 +1,7 @@
 import proxytoggle
 
+short_description = 'A command-line tool to run programs seamlessly behind a proxy.'
+
 
 try:
     from setuptools import setup
@@ -24,7 +26,7 @@ test_requirements = []
 setup(
     name = 'proxy-toggle',
     version = proxytoggle.__version__,
-    description = "A command-line tool to run programs seamlessly behind a proxy.",
+    description = short_description,
     long_description = readme + '\n\n' + history,
     author = "Patrik Beyls",
     url = 'https://github.com/beylsp/proxy-toggle',
