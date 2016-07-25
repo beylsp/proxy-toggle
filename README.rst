@@ -9,6 +9,7 @@ proxy-toggle
      :target: https://coveralls.io/github/beylsp/proxy-toggle?branch=master
 
 .. image:: https://readthedocs.org/projects/proxy-toggle/badge
+      :target: https://proxy-toggle.readthedocs.io/en/latest/
 
 A command-line tool to run programs seamlessly behind a proxy.
 
