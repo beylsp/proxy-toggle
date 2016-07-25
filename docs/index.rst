@@ -10,7 +10,7 @@ A command-line tool to run programs seamlessly behind a proxy.
 
 Introduction
 ------------
-Many corporate networks use proxies both for network protection and to cache often-used content. This command-line tool allows you to run programs behind a corporate proxy without the need to constantly set/unset proxy environment variables. It sets the environment variables only when needed and unsets them whenever the program finished its execution.
+Many corporate networks use proxies both for network protection and to cache often-used content. This command-line tool allows you to run programs behind a corporate proxy without the need to constantly set/unset proxy environment variables. It sets the environment variables only when needed and unsets them whenever the program finished its execution. Currently, proxy-toggle only supports *Basic Access Authentication* as the authentication scheme to the proxy.
 
 Installation
 ------------
