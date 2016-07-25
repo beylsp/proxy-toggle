@@ -62,7 +62,7 @@ class ProxyStore(object):
             print 'Error initializing proxy store.'
             print err
             sys.exit(err.errno)
- 
+
         host, user, password = self._get_user_input()
 
         try:
