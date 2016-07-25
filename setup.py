@@ -1,3 +1,6 @@
+import proxytoggle
+
+
 try:
     from setuptools import setup
 except ImportError:
@@ -20,7 +23,7 @@ test_requirements = []
 
 setup(
     name = 'proxy-toggle',
-    version = '1.0.0',
+    version = proxytoggle.__version__,
     description = "A command-line tool to run programs seamlessly behind a proxy.",
     long_description = readme + '\n\n' + history,
     author = "Patrik Beyls",
