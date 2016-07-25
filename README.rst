@@ -8,6 +8,8 @@ proxy-toggle
 .. image:: https://coveralls.io/repos/github/beylsp/proxy-toggle/badge.svg?branch=master
      :target: https://coveralls.io/github/beylsp/proxy-toggle?branch=master
 
+.. image:: https://readthedocs.org/projects/proxy-toggle/badge
+
 A command-line tool to run programs seamlessly behind a proxy.
 
 Introduction
