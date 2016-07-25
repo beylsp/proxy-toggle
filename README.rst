@@ -61,6 +61,12 @@ If your proxy doesn't require user authentication, run it with :bash:`--nouser` 
 
     $ px --nouser <program>
 
+When you want to renew your proxy password, run it with :bash:`--renew` option:
+
+.. code-block:: bash
+
+    $ px --renew
+
 
 Examples
 --------

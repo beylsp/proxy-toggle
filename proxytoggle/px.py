@@ -33,14 +33,27 @@ class ProxyStore(object):
     This class generates a gnupg keyring to keep an RSA key pair. The RSA key
     is used to encrypt the user's proxy password.
     """
-    def __init__(self):
+    def __init__(self, renew=False):
         """Constructor of ProxyStore.
 
         Creates directory structure, sets up a gnupg keyring and initializes
-        the proxy toggle application.
-        """
-        host, user, password = self._get_user_input()
+        the proxy toggle application. When a renew is requested, the new
+        password is encrypted with the previously generated key.
 
+        Args:
+          renew: boolean, just renew password (default: False).
+        """
+        if renew:
+            self._renew_app()
+        else:
+            self._init_app()
+
+    def _init_app(self):
+        """Initialize proxy application.
+
+        Creates proxy configuration file ('px.conf') and hidden password file
+        that stores the encrypted proxy password.
+        """
         try:
             if os.path.exists(PX_DIR):
                 shutil.rmtree(PX_DIR)
@@ -49,30 +62,64 @@ class ProxyStore(object):
             print 'Error initializing proxy store.'
             print err
             sys.exit(err.errno)
+ 
+        host, user, password = self._get_user_input()
 
         try:
-            self.gpg = gnupg.GPG(homedir=PX_DIR)
+            gpg = gnupg.GPG(homedir=PX_DIR)
         except RuntimeError, err:
             print 'Error initializing keyring.'
             print err
             sys.exit(err.errno)
         else:
             passphrase = self._passphrase()
-            self.key = self._generate_key(passphrase)
+            key = self._generate_key(passphrase)
 
-        self._init_app(passphrase, host, user, password)
+        self._write_config(passphrase, host, user)
+        self._write_pass(str(gpg.encrypt(normalize(password),
+                                         key.fingerprint)))
 
-    def _init_app(self, passphrase, host, user, password):
-        """Initialize proxy application.
+    def _renew_app(self):
+        """Renew proxy application with new password."""
+        try:
+            gpg = gnupg.GPG(homedir=PX_DIR)
+        except RuntimeError, err:
+            print 'Error renewing password. Try to run "px --init".'
+            print err
+            sys.exit(err.errno)
+        else:
+            keys = gpg.list_keys()
+            if not keys:
+                print 'No keys found. Please run "px --init" first.'
+                sys.exit()
+            else:
+                password = self._ask('Please enter new proxy password: ',
+                                     mask=True)
+                self._write_pass(str(gpg.encrypt(normalize(password),
+                                                 keys[0]['fingerprint'])))
 
-        Creates proxy configuration file (px.conf) and hidden password file
-        that stores the encrypted proxy password.
+    def _write_pass(self, password):
+        """Write password file ('.pass').
+
+        Args:
+          password: string, proxy user password.
+        """
+        try:
+            fd = os.open(os.path.join(PX_DIR, '.pass'),
+                         os.O_WRONLY | os.O_CREAT, 0600)
+            with os.fdopen(fd, 'wb') as passfile:
+                passfile.write(password)
+        except IOError, err:
+            print err
+            sys.exit(err.errno)
+
+    def _write_config(self, passphrase, host, user):
+        """Write config file ('px.conf').
 
         Args:
           passphrase: string, passphrase to lock keyring.
           host: string, proxy host URL.
           user: string, proxy user account.
-          password: string, proxy user password.
         """
         config = ConfigParser.ConfigParser()
         config.add_section('proxy')
@@ -80,19 +127,11 @@ class ProxyStore(object):
         config.set('proxy', 'user', normalize(user))
         config.set('proxy', 'passphrase', passphrase)
 
-        password = str(self.gpg.encrypt(normalize(password),
-                       self.key.fingerprint))
-
         try:
             fd = os.open(os.path.join(PX_DIR, 'px.conf'),
                          os.O_WRONLY | os.O_CREAT, 0600)
             with os.fdopen(fd, 'wb') as configfile:
                 config.write(configfile)
-
-            fd = os.open(os.path.join(PX_DIR, '.pass'),
-                         os.O_WRONLY | os.O_CREAT, 0600)
-            with os.fdopen(fd, 'wb') as passfile:
-                passfile.write(str(password))
         except IOError, err:
             print err
             sys.exit(err.errno)
@@ -276,11 +315,15 @@ def _parse_command_line():
                        action='store_true',
                        default=False,
                        help='Proxy does not require a username and password.')
+    group.add_argument('--renew',
+                       action='store_true',
+                       default=False,
+                       help='Renew password.')
     return parser.parse_known_args(sys.argv[1:])
 
 
 def usage():
-    return '''px --help | --init | [--nouser] program'''
+    return '''px --help | --init | --renew | [--nouser] program'''
 
 
 init_proxy_store = ProxyStore
@@ -289,8 +332,8 @@ _exec = ProxyExec()
 
 def main():
     config, _ = _parse_command_line()
-    if config.init:
-        init_proxy_store()
+    if config.init or config.renew:
+        init_proxy_store(config.renew)
     else:
         _exec(config.nouser, sys.argv[1:])
 
