@@ -17,5 +17,5 @@ deploy:
     secure: IQb8wzkYJA+q5qTor9R+OMuJBFHNmY6tPavx3OgqwgisofSwzS9PSAhO7gr2Aha54Qn8tfMxVpeLC3AdYaE9M6hwaGWb+8VgjZZXUcnH/QK5WL4iYIBKVzqQgjE9XPZU65rqf3VuaevQ0thXC9tceRpVN4nOuwH+UMSvvTIb7uA+z8s71a+DvHfqRZJLilIaf/4Snt2FCrSHT0L3n9VuzEo+8h+mUkMAiBnnF3G1QfWQhZnQ61OcHjxrEnBFgDzA/l88oy66KJcCiJr0iQT/HvdIBuXrl/GI3PHwB+8dTsa+pGE3KlMaNhyTaIUOR2F2uRWlUkumhEyHbOnTq1ayfi/AqauO09UWrDbFTBMuDswUw0+eVB8chu+cafxUzIdFlE0q+A0U2r8R3+GOpVHnarXf5ahILhEe0nFIMwmWZPs/MkOwYWpQsQ2VP5qVNje5u8p2eNNm3BcDuoQ2LrqTYOLXTJD/RTnjBMI3SC+XwLNfn5rmWe/M3UB3XeROLfM+ZWThviOxh9o2bIrmPLC+AIDAuNHWGH2dUlnFJI2H6ISd43BpVvn18LcHK6I7ahmhF8o78Vy1nYxVixywHpfq0JLJVCHo3qDpP4cMKQkXi77GJIof8Dc/l10j3N+yg6vocTcfj2ZKy30J36YBCtfOYd5OZNU7b/40aeCngna0UDk=
   on:
     branch: master
-    tags: false
+    tags: true 
     condition: $TOXENV = py27
