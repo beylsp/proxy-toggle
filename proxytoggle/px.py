@@ -73,7 +73,7 @@ class ProxyStore(object):
             sys.exit(err.errno)
         else:
             passphrase = self._passphrase()
-            key = self._generate_key(passphrase)
+            key = self._generate_key(gpg, passphrase)
 
         self._write_config(passphrase, host, user)
         self._write_pass(str(gpg.encrypt(normalize(password),
@@ -176,10 +176,11 @@ class ProxyStore(object):
             self._ask(question, validator)
         return _input
 
-    def _generate_key(self, passphrase):
+    def _generate_key(self, gpg, passphrase):
         """Create batch file for input to key generation.
 
         Args:
+          gpg: gnupg object, interface to gnupg keyring. 
           passphrase: string, passphrase used to lock keyring.
 
         Returns:
@@ -191,10 +192,10 @@ class ProxyStore(object):
             'key_type': 'RSA',
             'key_length': 1024,
             'passphrase': passphrase}
-        key_settings = self.gpg.gen_key_input(**batch)
+        key_settings = gpg.gen_key_input(**batch)
 
         print 'Generating a basic OpenPGP RSA key. This might take a while...'
-        return self.gpg.gen_key(key_settings)
+        return gpg.gen_key(key_settings)
 
     def _passphrase(self, length=8):
         """Generate random passphrase.
