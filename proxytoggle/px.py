@@ -180,7 +180,7 @@ class ProxyStore(object):
         """Create batch file for input to key generation.
 
         Args:
-          gpg: gnupg object, interface to gnupg keyring. 
+          gpg: gnupg object, interface to gnupg keyring.
           passphrase: string, passphrase used to lock keyring.
 
         Returns:
