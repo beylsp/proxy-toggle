@@ -12,6 +12,8 @@ import sys
 import urllib
 import urlparse
 
+from proxytoggle import __version__
+
 PX_DIR = os.path.join(os.path.expanduser('~'), '.px')
 
 
@@ -320,6 +322,10 @@ def _parse_command_line():
                        action='store_true',
                        default=False,
                        help='Renew password.')
+    group.add_argument('--version',
+                       action='version',
+                       version='%(prog)s version {v}'.format(v=__version__),
+                       help='Print version.')
     return parser.parse_known_args(sys.argv[1:])
 
 
