@@ -147,35 +147,33 @@ class ProxyStore(object):
         d = [
             ('host', {'validator': bool}),
             ('user', {}),
-            ('password', {'mask': True, 'validator': bool})]
+            ('password', {'input_function': getpass.getpass,
+                          'validator': bool})]
         for field, kwargs in d:
             yield self._ask('Please enter proxy %s: ' % field, **kwargs)
 
-    def _ask(self, question, mask=False, validator=bool):
+    def _ask(self, question, input_function=raw_input, validator=bool):
         """Ask a question to standard input and validate answer.
 
         This question is repeatedly asked until successfully validated.
 
         Args:
           question: string, question to be asked.
-          mask: boolean, whether or not to mask answer,
-            e.g. password field (default: False).
+          input_function: function, input function to be called
+            (default: raw_input).
           validator: function, invoked to validate answer (default: bool).
 
         Returns:
           The answer to the question.
         """
         try:
-            if mask:
-                _input = getpass.getpass(question)
-            else:
-                _input = raw_input(question)
+            _input = input_function(question)
         except KeyboardInterrupt:
             print
             sys.exit()
 
         if not validator(_input):
-            self._ask(question, validator)
+            self._ask(question, input_function, validator)
         return _input
 
     def _generate_key(self, gpg, passphrase):
