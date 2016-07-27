@@ -59,7 +59,7 @@ class ProxyStore(object):
         try:
             if os.path.exists(PX_DIR):
                 shutil.rmtree(PX_DIR)
-            os.makedirs(PX_DIR, 0700)
+            os.makedirs(PX_DIR, 0o700)
         except IOError, err:
             print 'Error initializing proxy store.'
             print err
@@ -108,7 +108,7 @@ class ProxyStore(object):
         """
         try:
             fd = os.open(os.path.join(PX_DIR, '.pass'),
-                         os.O_WRONLY | os.O_CREAT, 0600)
+                         os.O_WRONLY | os.O_CREAT, 0o600)
             with os.fdopen(fd, 'wb') as passfile:
                 passfile.write(password)
         except IOError, err:
@@ -131,7 +131,7 @@ class ProxyStore(object):
 
         try:
             fd = os.open(os.path.join(PX_DIR, 'px.conf'),
-                         os.O_WRONLY | os.O_CREAT, 0600)
+                         os.O_WRONLY | os.O_CREAT, 0o600)
             with os.fdopen(fd, 'wb') as configfile:
                 config.write(configfile)
         except IOError, err:
