@@ -60,7 +60,7 @@ class ProxyStore(object):
             if os.path.exists(PX_DIR):
                 shutil.rmtree(PX_DIR)
             os.makedirs(PX_DIR, 0o700)
-        except IOError, err:
+        except IOError as err:
             print 'Error initializing proxy store.'
             print err
             sys.exit(err.errno)
@@ -69,7 +69,7 @@ class ProxyStore(object):
 
         try:
             gpg = gnupg.GPG(homedir=PX_DIR)
-        except RuntimeError, err:
+        except RuntimeError as err:
             print 'Error initializing keyring.'
             print err
             sys.exit(err.errno)
@@ -85,7 +85,7 @@ class ProxyStore(object):
         """Renew proxy application with new password."""
         try:
             gpg = gnupg.GPG(homedir=PX_DIR)
-        except RuntimeError, err:
+        except RuntimeError as err:
             print 'Error renewing password. Try to run "px --init".'
             print err
             sys.exit(err.errno)
@@ -111,7 +111,7 @@ class ProxyStore(object):
                          os.O_WRONLY | os.O_CREAT, 0o600)
             with os.fdopen(fd, 'wb') as passfile:
                 passfile.write(password)
-        except IOError, err:
+        except IOError as err:
             print err
             sys.exit(err.errno)
 
@@ -134,7 +134,7 @@ class ProxyStore(object):
                          os.O_WRONLY | os.O_CREAT, 0o600)
             with os.fdopen(fd, 'wb') as configfile:
                 config.write(configfile)
-        except IOError, err:
+        except IOError as err:
             print err
             sys.exit(err.errno)
 
@@ -251,7 +251,7 @@ class ProxyExec(object):
         try:
             with open(passfile) as fd:
                 password = fd.read()
-        except IOError, err:
+        except IOError as err:
             print err
             print 'No passfile found. Please run "px --init" first.'
             sys.exit(err.errno)
@@ -273,11 +273,11 @@ class ProxyExec(object):
                 host = config.get('proxy', 'host')
                 user = config.get('proxy', 'user')
                 passphrase = config.get('proxy', 'passphrase')
-        except IOError, err:
+        except IOError as err:
             print err
             print 'No proxy settings found. Please run "px --init" first.'
             sys.exit(err.errno)
-        except ConfigParser.Error, err:
+        except ConfigParser.Error as err:
             print 'Error proxy settings (%s)' % configfile
             print err
             print 'Please run "px --init" again.'
