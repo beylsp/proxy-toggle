@@ -75,7 +75,6 @@ class TestProxyStore(unittest.TestCase):
         q = 'Do you feel lucky?'
         with self.assertRaises(SystemExit) as e_cm:
             self.store._ask(q, input_function=input)
-
         self.assertIsInstance(e_cm.exception, SystemExit)
 
     def test_get_user_input_calls_for_correct_input(self):

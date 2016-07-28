@@ -1,6 +1,5 @@
 """A command-line tool to run programs seamlessly behind a proxy."""
 import argparse
-import ConfigParser
 import getpass
 import gnupg
 import os
@@ -11,6 +10,11 @@ import subprocess
 import sys
 import urllib
 import urlparse
+
+if sys.version_info[0] >= 3:  # Python 3
+    import configparser as ConfigParser
+else:  # Python 2
+    import ConfigParser
 
 from proxytoggle import __version__
 
