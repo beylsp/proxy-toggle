@@ -27,7 +27,7 @@ def normalize(s):
     Returns:
       Normalized string.
     """
-    return urllib.quote_plus(s)
+    return urllib.parse.quote_plus(s)
 
 
 class ProxyStore(object):
@@ -135,7 +135,7 @@ class ProxyStore(object):
                          os.O_WRONLY | os.O_CREAT, 0o600)
             with os.fdopen(fd, 'wb') as configfile:
                 config.write(configfile)
-        except IOError as err:
+        except OSError as err:
             print(err)
             sys.exit(err.errno)
 

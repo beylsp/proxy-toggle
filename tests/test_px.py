@@ -1,7 +1,8 @@
+import errno
 import getpass
 import mock
 import string
-import types
+import sys
 import unittest
 
 from proxytoggle.px import ProxyStore
@@ -87,3 +88,17 @@ class TestProxyStore(unittest.TestCase):
         # eat results yielded by generator
         _ = list(self.store._get_user_input())
         self.assertEquals(self.store._ask.call_args_list, expected_questions)
+
+    def test_write_config_prog_exits_if_no_file(self):
+        sys.stdout = mock.MagicMock()
+
+        oserr = OSError()
+        oserr.errno = errno.ENOENT
+        oserr.strerror = 'No such file or directory'
+        oserr.filename = 'px.conf'
+
+        with mock.patch('os.open', side_effect=oserr) as mock_open:
+            with self.assertRaises(SystemExit) as e_cm:
+                self.store._write_config('http://corporate.proxy.com', 'john', 'doe')
+
+        self.assertEquals(e_cm.exception.code, errno.ENOENT)
