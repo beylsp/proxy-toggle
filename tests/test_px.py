@@ -1,3 +1,4 @@
+import getpass
 import mock
 import string
 import types
@@ -76,3 +77,14 @@ class TestProxyStore(unittest.TestCase):
             self.store._ask(q, input_function=input)
 
         self.assertIsInstance(e_cm.exception, SystemExit)
+
+    def test_get_user_input_calls_for_correct_input(self):
+        prefix = 'Please enter proxy'
+        expected_questions = [mock.call('%s host: ' % prefix),
+                              mock.call('%s user: ' % prefix),
+                              mock.call('%s password: ' % prefix,
+                                  input_function=getpass.getpass)]
+        self.store._ask = mock.MagicMock()
+        # eat results yielded by generator
+        _ = list(self.store._get_user_input())
+        self.assertEquals(self.store._ask.call_args_list, expected_questions)

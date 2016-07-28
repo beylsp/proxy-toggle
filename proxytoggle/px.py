@@ -61,8 +61,8 @@ class ProxyStore(object):
                 shutil.rmtree(PX_DIR)
             os.makedirs(PX_DIR, 0o700)
         except IOError as err:
-            print 'Error initializing proxy store.'
-            print err
+            print('Error initializing proxy store.')
+            print(err)
             sys.exit(err.errno)
 
         host, user, password = self._get_user_input()
@@ -70,8 +70,8 @@ class ProxyStore(object):
         try:
             gpg = gnupg.GPG(homedir=PX_DIR)
         except RuntimeError as err:
-            print 'Error initializing keyring.'
-            print err
+            print('Error initializing keyring.')
+            print(err)
             sys.exit(err.errno)
         else:
             passphrase = self._passphrase()
@@ -86,13 +86,13 @@ class ProxyStore(object):
         try:
             gpg = gnupg.GPG(homedir=PX_DIR)
         except RuntimeError as err:
-            print 'Error renewing password. Try to run "px --init".'
-            print err
+            print('Error renewing password. Try to run "px --init".')
+            print(err)
             sys.exit(err.errno)
         else:
             keys = gpg.list_keys()
             if not keys:
-                print 'No keys found. Please run "px --init" first.'
+                print('No keys found. Please run "px --init" first.')
                 sys.exit()
             else:
                 password = self._ask('Please enter new proxy password: ',
@@ -112,7 +112,7 @@ class ProxyStore(object):
             with os.fdopen(fd, 'wb') as passfile:
                 passfile.write(password)
         except IOError as err:
-            print err
+            print(err)
             sys.exit(err.errno)
 
     def _write_config(self, passphrase, host, user):
@@ -135,7 +135,7 @@ class ProxyStore(object):
             with os.fdopen(fd, 'wb') as configfile:
                 config.write(configfile)
         except IOError as err:
-            print err
+            print(err)
             sys.exit(err.errno)
 
     def _get_user_input(self):
@@ -145,10 +145,9 @@ class ProxyStore(object):
           Generator yielding proxy settings from user input.
         """
         d = [
-            ('host', {'validator': bool}),
+            ('host', {}),
             ('user', {}),
-            ('password', {'input_function': getpass.getpass,
-                          'validator': bool})]
+            ('password', {'input_function': getpass.getpass})]
         for field, kwargs in d:
             yield self._ask('Please enter proxy %s: ' % field, **kwargs)
 
@@ -169,7 +168,7 @@ class ProxyStore(object):
         try:
             _input = input_function(question)
         except KeyboardInterrupt:
-            print
+            print()
             sys.exit()
 
         if not validator(_input):
@@ -194,7 +193,7 @@ class ProxyStore(object):
             'passphrase': passphrase}
         key_settings = gpg.gen_key_input(**batch)
 
-        print 'Generating a basic OpenPGP RSA key. This might take a while...'
+        print('Generating a basic OpenPGP RSA key. This might take a while...')
         return gpg.gen_key(key_settings)
 
     def _passphrase(self, length=8):
@@ -252,8 +251,8 @@ class ProxyExec(object):
             with open(passfile) as fd:
                 password = fd.read()
         except IOError as err:
-            print err
-            print 'No passfile found. Please run "px --init" first.'
+            print(err)
+            print('No passfile found. Please run "px --init" first.')
             sys.exit(err.errno)
         else:
             gpg = gnupg.GPG(homedir=PX_DIR)
@@ -274,13 +273,13 @@ class ProxyExec(object):
                 user = config.get('proxy', 'user')
                 passphrase = config.get('proxy', 'passphrase')
         except IOError as err:
-            print err
-            print 'No proxy settings found. Please run "px --init" first.'
+            print(err)
+            print('No proxy settings found. Please run "px --init" first.')
             sys.exit(err.errno)
         except ConfigParser.Error as err:
-            print 'Error proxy settings (%s)' % configfile
-            print err
-            print 'Please run "px --init" again.'
+            print('Error proxy settings (%s)' % configfile)
+            print(err)
+            print('Please run "px --init" again.')
             sys.exit(1)
 
         return user, self.get_password(passphrase), urlparse.urlparse(host)
