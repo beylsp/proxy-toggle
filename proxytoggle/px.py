@@ -8,14 +8,9 @@ import string
 import struct
 import subprocess
 import sys
-import urllib
-import urlparse
 
-if sys.version_info[0] >= 3:  # Python 3
-    import configparser as ConfigParser
-else:  # Python 2
-    import ConfigParser
-
+from six.moves import configparser
+from six.moves import urllib
 from proxytoggle import __version__
 
 PX_DIR = os.path.join(os.path.expanduser('~'), '.px')
@@ -127,7 +122,7 @@ class ProxyStore(object):
           host: string, proxy host URL.
           user: string, proxy user account.
         """
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config.add_section('proxy')
         config.set('proxy', 'host', host)
         config.set('proxy', 'user', normalize(user))
@@ -269,7 +264,7 @@ class ProxyExec(object):
           user name, decrypted user password and urlparsed proxy host.
         """
         configfile = os.path.join(PX_DIR, 'px.conf')
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         try:
             with open(configfile) as fd:
                 config.readfp(fd)
@@ -280,13 +275,13 @@ class ProxyExec(object):
             print(err)
             print('No proxy settings found. Please run "px --init" first.')
             sys.exit(err.errno)
-        except ConfigParser.Error as err:
+        except configparser.Error as err:
             print('Error proxy settings (%s)' % configfile)
             print(err)
             print('Please run "px --init" again.')
             sys.exit(1)
 
-        return user, self.get_password(passphrase), urlparse.urlparse(host)
+        return user, self.get_password(passphrase), urllib.parse.urlparse(host)
 
     def __call__(self, nouser, cmd):
         """Execute child process with proxy environment.
