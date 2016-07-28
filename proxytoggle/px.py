@@ -10,7 +10,9 @@ import subprocess
 import sys
 
 from six.moves import configparser
+from six.moves import input
 from six.moves import urllib
+
 from proxytoggle import __version__
 
 PX_DIR = os.path.join(os.path.expanduser('~'), '.px')
@@ -150,7 +152,7 @@ class ProxyStore(object):
         for field, kwargs in d:
             yield self._ask('Please enter proxy %s: ' % field, **kwargs)
 
-    def _ask(self, question, input_function=raw_input, validator=bool):
+    def _ask(self, question, input_function=input, validator=bool):
         """Ask a question to standard input and validate answer.
 
         This question is repeatedly asked until successfully validated.
@@ -158,7 +160,7 @@ class ProxyStore(object):
         Args:
           question: string, question to be asked.
           input_function: function, input function to be called
-            (default: raw_input).
+            (default: input).
           validator: function, invoked to validate answer (default: bool).
 
         Returns:
