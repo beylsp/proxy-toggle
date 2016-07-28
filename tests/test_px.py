@@ -94,7 +94,7 @@ class TestProxyStore(unittest.TestCase):
 
         # generate 'permission denied' error
         oserr = OSError()
-        oserr.errno = errno.EACCESS
+        oserr.errno = errno.EACCES
         oserr.strerror = 'Permission denied'
         oserr.filename = 'px.conf'
 
@@ -102,4 +102,19 @@ class TestProxyStore(unittest.TestCase):
             with self.assertRaises(SystemExit) as e_cm:
                 self.store._write_config('http://corporate.proxy.com', 'john', 'doe')
 
-        self.assertEquals(e_cm.exception.code, errno.EACCESS)
+        self.assertEquals(e_cm.exception.code, errno.EACCES)
+
+    def test_write_config_prog_exits_if_bad_file_descriptor(self):
+        sys.stdout = mock.MagicMock()
+
+        # generate 'bad file descriptor' error
+        oserr = OSError()
+        oserr.errno = errno.EBADF
+        oserr.strerror = 'Bad file descriptor'
+
+        with mock.patch('os.open', side_effect=oserr) as mock_open:
+            with self.assertRaises(SystemExit) as e_cm:
+                self.store._write_config('http://corporate.proxy.com', 'john', 'doe')
+
+        self.assertEquals(e_cm.exception.code, errno.EBADF)
+
