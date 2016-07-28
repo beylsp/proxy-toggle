@@ -1,6 +1,7 @@
 import errno
 import getpass
 import mock
+import os
 import string
 import sys
 import unittest
@@ -105,6 +106,7 @@ class TestProxyStore(unittest.TestCase):
         self.assertEquals(e_cm.exception.code, errno.EACCES)
 
     def test_write_config_prog_exits_if_bad_file_descriptor(self):
+        os.open = mock.MagicMock()
         sys.stdout = mock.MagicMock()
 
         # generate 'bad file descriptor' error
@@ -112,7 +114,7 @@ class TestProxyStore(unittest.TestCase):
         oserr.errno = errno.EBADF
         oserr.strerror = 'Bad file descriptor'
 
-        with mock.patch('os.open', side_effect=oserr) as mock_open:
+        with mock.patch('os.fdopen', side_effect=oserr) as mock_open:
             with self.assertRaises(SystemExit) as e_cm:
                 self.store._write_config('http://corporate.proxy.com', 'john', 'doe')
 
