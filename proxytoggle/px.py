@@ -299,6 +299,8 @@ class ProxyExec(object):
         proc = subprocess.Popen(' '.join(cmd), shell=True, env=self.env())
         proc.wait()
 
+        return proc.returncode
+
 
 def _parse_command_line():
     """Configure and parse our command line flags.
@@ -324,11 +326,15 @@ def _parse_command_line():
                        action='version',
                        version='%(prog)s version {v}'.format(v=__version__),
                        help='Print version.')
+    group.add_argument('--test',
+                       action='store_true',
+                       default=False,
+                       help='Test your proxy settings.')
     return parser.parse_known_args(sys.argv[1:])
 
 
 def usage():
-    return '''px --help | --init | --renew | [--nouser] program'''
+    return '''px --help | --test | --init | --renew | [--nouser] program'''
 
 
 init_proxy_store = ProxyStore
@@ -339,6 +345,14 @@ def main():
     config, _ = _parse_command_line()
     if config.init or config.renew:
         init_proxy_store(config.renew)
+    elif config.test:
+        print('Testing your proxy settings...')
+        test_url = 'http://httpbin.org'
+        pipes = ['wget --spider -S -t 1 -T 15 %s 2>&1' % test_url,
+                 'grep "HTTP/"',
+                 'awk \'{print $3}\'']
+        if _exec(False, [' | '.join(pipes)]):
+            print('FAILED')
     else:
         _exec(config.nouser, sys.argv[1:])
 
