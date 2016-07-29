@@ -6,7 +6,10 @@ import string
 import sys
 import unittest
 
+from six.moves import urllib
+
 from proxytoggle.px import ProxyStore
+from proxytoggle.px import ProxyExec
 
 
 class TestProxyStore(unittest.TestCase):
@@ -218,3 +221,24 @@ class TestProxyStore(unittest.TestCase):
         self.store._generate_key(gpg_mock, passphrase)
 
         gpg_mock.gen_key_input.assert_called_once_with(**batch)
+
+
+class TestProxyExec(unittest.TestCase):
+    def setUp(self):
+        self.executor = ProxyExec.__new__(ProxyExec)
+
+    def test_env_returns_correct_environment(self):
+        user = 'john'
+        password = 'doe'
+        urlo = urllib.parse.urlparse('http://corporate.proxy.com')
+        env = 'http://john:doe@corporate.proxy.com'
+        expected_dict = {
+            'http_proxy': env,
+            'https_proxy': env,
+            'ftp_proxy': env}
+
+        settings = (user, password, urlo)
+        self.executor.get_proxy_settings = mock.MagicMock(
+            return_value=(user, password, urlo))
+
+        self.assertEquals(self.executor.env(), expected_dict)

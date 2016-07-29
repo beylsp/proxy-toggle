@@ -222,15 +222,19 @@ class ProxyExec(object):
     The new process uses proxy environment variables instead of inheriting the
     current process' environment: 'http_proxy', 'https_proxy' and 'ftp_proxy'.
     """
-    def env(self):
+    def env(self, nouser=False):
         """Create environment mappings based on proxy settings.
+
+        Args:
+          nouser: boolean, whether or not to provide user name/password
+            to proxy host.
 
         Returns:
           Dictionary with environment variables.
         """
         myenv = {}
         user, pwd, urlo = self.get_proxy_settings()
-        if self.nouser:
+        if nouser:
             env = urlo.geturl()
         else:
             env = '%s://%s:%s@%s' % (urlo.scheme, user, pwd, urlo.netloc)
@@ -293,10 +297,10 @@ class ProxyExec(object):
             to proxy host.
           cmd: string, shell command to be executed.
         """
-        self.nouser = nouser
         if nouser:
             cmd = cmd[1:]
-        proc = subprocess.Popen(' '.join(cmd), shell=True, env=self.env())
+        proc = subprocess.Popen(' '.join(cmd), shell=True,
+                                env=self.env(nouser))
         proc.wait()
 
         return proc.returncode
