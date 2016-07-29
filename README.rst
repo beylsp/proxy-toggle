@@ -47,7 +47,9 @@ Before you can start using proxy-toggle, you must initialize the application:
     $ px --init
 
 
-This will prompt for your proxy settings: proxy server URL and user account/password. A secure keyring (to encrypt the password) will be generated. This might take a while. You can test your proxy settings with following command:
+This will prompt for your proxy settings: proxy server URL and user account/password. A secure keyring (to encrypt the password) will be generated. This might take a while.
+
+You can test your proxy settings with following command:
 
 .. code-block:: bash
 
