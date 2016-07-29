@@ -242,3 +242,20 @@ class TestProxyExec(unittest.TestCase):
             return_value=(user, password, urlo))
 
         self.assertEquals(self.executor.env(), expected_dict)
+
+    def test_env_nouser_returns_correct_environment(self):
+        user = 'john'
+        password = 'doe'
+        urlo = urllib.parse.urlparse('http://corporate.proxy.com')
+        env = 'http://corporate.proxy.com'
+        expected_dict = {
+            'http_proxy': env,
+            'https_proxy': env,
+            'ftp_proxy': env}
+
+        settings = (user, password, urlo)
+        self.executor.get_proxy_settings = mock.MagicMock(
+            return_value=(user, password, urlo))
+
+        self.assertEquals(self.executor.env(nouser=True), expected_dict)
+
