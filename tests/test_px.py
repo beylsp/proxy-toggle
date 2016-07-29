@@ -204,3 +204,17 @@ class TestProxyStore(unittest.TestCase):
         self.store.__init__(renew=False)
 
         self.store._init_app.assert_called_once()
+
+    def test_generate_key_with_correct_input(self):
+        passphrase = 'mypassphrase'
+        batch = {
+            'name_real': 'px',
+            'name_email': 'px@px',
+            'key_type': 'RSA',
+            'key_length': 1024,
+            'passphrase': passphrase}
+        sys.stdout = mock.MagicMock()
+        gpg_mock = mock.MagicMock(spec=['gen_key_input', 'gen_key'])
+        self.store._generate_key(gpg_mock, passphrase)
+
+        gpg_mock.gen_key_input.assert_called_once_with(**batch)

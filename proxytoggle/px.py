@@ -97,7 +97,7 @@ class ProxyStore(object):
                 sys.exit()
             else:
                 password = self._ask('Please enter new proxy password: ',
-                                     mask=True)
+                                     input_function=getpass.getpass)
                 self._write_pass(str(gpg.encrypt(normalize(password),
                                                  keys[0]['fingerprint'])))
 
