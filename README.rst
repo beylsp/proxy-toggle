@@ -91,4 +91,4 @@ Examples
 Contributing
 ------------
 
-We love contributions. If you've found a bug in the tool or would like new features added, go ahead and open issues or pull requests against this repo.
+We love contributions. If you've found a bug in the tool or would like new features added, go ahead and open issues or pull requests against this repo. Write a test to show your bug was fixed or the feature works as expected.
