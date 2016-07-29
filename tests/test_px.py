@@ -192,3 +192,15 @@ class TestProxyStore(unittest.TestCase):
             self.store._write_pass(password)
 
         m.return_value.write.assert_called_once_with(password)
+
+    def test_renew_app_called_if_renew_flag_is_set(self):
+        self.store._renew_app = mock.MagicMock()
+        self.store.__init__(renew=True)
+
+        self.store._renew_app.assert_called_once()
+
+    def test_init_app_called_if_renew_flag_is_not_set(self):
+        self.store._init_app = mock.MagicMock()
+        self.store.__init__(renew=False)
+
+        self.store._init_app.assert_called_once()
