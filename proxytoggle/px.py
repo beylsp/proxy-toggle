@@ -112,7 +112,7 @@ class ProxyStore(object):
                          os.O_WRONLY | os.O_CREAT, 0o600)
             with os.fdopen(fd, 'wb') as passfile:
                 passfile.write(password)
-        except IOError as err:
+        except OSError as err:
             print(err)
             sys.exit(err.errno)
 

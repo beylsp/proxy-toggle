@@ -70,10 +70,11 @@ class TestProxyStore(unittest.TestCase):
                                  validator=validate)
         self.assertEquals(self.count, 2)
 
-    def test_aks_question_keyboard_interrupt(self):
+    def test_ask_question_keyboard_interrupt(self):
         def input(question):
             raise KeyboardInterrupt
 
+        sys.stdout = mock.MagicMock()
         q = 'Do you feel lucky?'
         with self.assertRaises(SystemExit) as e_cm:
             self.store._ask(q, input_function=input)
@@ -101,7 +102,7 @@ class TestProxyStore(unittest.TestCase):
 
         with mock.patch('os.open', side_effect=oserr) as mock_open:
             with self.assertRaises(SystemExit) as e_cm:
-                self.store._write_config('http://corporate.proxy.com', 'john', 'doe')
+                self.store._write_config('doe', 'http://corporate.proxy.com', 'john')
 
         self.assertEquals(e_cm.exception.code, errno.EACCES)
 
@@ -116,7 +117,78 @@ class TestProxyStore(unittest.TestCase):
 
         with mock.patch('os.fdopen', side_effect=oserr) as mock_open:
             with self.assertRaises(SystemExit) as e_cm:
-                self.store._write_config('http://corporate.proxy.com', 'john', 'doe')
+                self.store._write_config('doe', 'http://corporate.proxy.com', 'john')
 
         self.assertEquals(e_cm.exception.code, errno.EBADF)
 
+    def test_write_config_creates_file_with_correct_permission(self):
+        cfg_file = os.path.join(os.path.expanduser('~'), '.px', 'px.conf')
+        os.open = mock.MagicMock()
+        os.fdopen = mock.MagicMock()
+
+        self.store._write_config('doe', 'http://corporate.proxy.com', 'john')
+        os.open.assert_called_once_with(cfg_file, os.O_WRONLY | os.O_CREAT, 0o600)
+
+    def test_write_config_gives_correct_data_to_configparser(self):
+        section = 'proxy'
+        host = 'http://corporate.proxy.com'
+        user = 'john'
+        passphrase = 'doe'
+        expected_args = [mock.call(section, 'host', host),
+                         mock.call(section, 'user', user),
+                         mock.call(section, 'passphrase', passphrase)]
+        os.open = mock.MagicMock()
+        os.fdopen = mock.MagicMock()
+
+        with mock.patch('proxytoggle.px.configparser.ConfigParser.set') as mock_config_set:
+            self.store._write_config(passphrase, host, user)
+
+        self.assertEquals(mock_config_set.call_args_list, expected_args)
+
+    def test_write_pass_prog_exits_if_permission_denied(self):
+        sys.stdout = mock.MagicMock()
+
+        # generate 'permission denied' error
+        oserr = OSError()
+        oserr.errno = errno.EACCES
+        oserr.strerror = 'Permission denied'
+        oserr.filename = '.pass'
+
+        with mock.patch('os.open', side_effect=oserr) as mock_open:
+            with self.assertRaises(SystemExit) as e_cm:
+                self.store._write_pass('mysecretpassword')
+
+        self.assertEquals(e_cm.exception.code, errno.EACCES)
+
+    def test_write_pass_prog_exits_if_bad_file_descriptor(self):
+        os.open = mock.MagicMock()
+        sys.stdout = mock.MagicMock()
+
+        # generate 'bad file descriptor' error
+        oserr = OSError()
+        oserr.errno = errno.EBADF
+        oserr.strerror = 'Bad file descriptor'
+
+        with mock.patch('os.fdopen', side_effect=oserr) as mock_open:
+            with self.assertRaises(SystemExit) as e_cm:
+                self.store._write_pass('mysecretpassword')
+
+        self.assertEquals(e_cm.exception.code, errno.EBADF)
+
+    def test_write_pass_creates_file_with_correct_permission(self):
+        pass_file = os.path.join(os.path.expanduser('~'), '.px', '.pass')
+        os.open = mock.MagicMock()
+        os.fdopen = mock.MagicMock()
+
+        self.store._write_pass('mysecretpassword')
+        os.open.assert_called_once_with(pass_file, os.O_WRONLY | os.O_CREAT, 0o600)
+
+    def test_write_pass_writes_correct_password(self):
+        password = 'mysecretpassword'
+        os.open = mock.MagicMock(return_value=4)
+        m = mock.mock_open()
+
+        with mock.patch('os.fdopen', m):
+            self.store._write_pass(password)
+
+        m.return_value.write.assert_called_once_with(password)
