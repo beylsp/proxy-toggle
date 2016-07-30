@@ -3,6 +3,7 @@ import getpass
 import mock
 import os
 import string
+import subprocess
 import sys
 import unittest
 
@@ -259,6 +260,17 @@ class TestProxyExec(unittest.TestCase):
             return_value=(user, password, urlo))
 
         self.assertEquals(self.executor.env(nouser=True), expected_dict)
+
+    def test_call_executes_child_process(self):
+        cmd = ['arg1', 'arg2', 'arg3']
+        expected_args = [mock.call(' '.join(cmd),
+                                   shell=True,
+                                   env={})]
+        subprocess.Popen = mock.MagicMock()
+        with mock.patch('proxytoggle.px.ProxyExec.env', return_value={}):
+            self.executor(nouser=False, cmd=cmd)
+        self.assertEquals(subprocess.Popen.call_args_list, expected_args)
+
 
 class TestArgumentParser(unittest.TestCase):
     def test_init_command_line_argument(self):
