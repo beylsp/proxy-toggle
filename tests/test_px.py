@@ -271,6 +271,15 @@ class TestProxyExec(unittest.TestCase):
             self.executor(nouser=False, cmd=cmd)
         self.assertEquals(subprocess.Popen.call_args_list, expected_args)
 
+    def test_call_with_nouser_flag_executes_child_process(self):
+        cmd = ['arg1', 'arg2', 'arg3']
+        expected_args = [mock.call(' '.join(cmd[1:]),
+                                   shell=True,
+                                   env={})]
+        subprocess.Popen = mock.MagicMock()
+        with mock.patch('proxytoggle.px.ProxyExec.env', return_value={}):
+            self.executor(nouser=True, cmd=cmd)
+        self.assertEquals(subprocess.Popen.call_args_list, expected_args)
 
 class TestArgumentParser(unittest.TestCase):
     def test_init_command_line_argument(self):
