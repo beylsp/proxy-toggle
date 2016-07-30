@@ -8,6 +8,7 @@ import unittest
 
 from six.moves import urllib
 
+from proxytoggle import px
 from proxytoggle.px import ProxyStore
 from proxytoggle.px import ProxyExec
 
@@ -259,3 +260,42 @@ class TestProxyExec(unittest.TestCase):
 
         self.assertEquals(self.executor.env(nouser=True), expected_dict)
 
+class TestArgumentParser(unittest.TestCase):
+    def test_init_command_line_argument(self):
+        sys.argv = ['px', '--init']
+        config, remainder = px._parse_command_line()
+        self.assertTrue(config.init)
+
+    def test_nouser_command_line_argument(self):
+        sys.argv = ['px', '--nouser']
+        config, remainder = px._parse_command_line()
+        self.assertTrue(config.nouser)
+
+    def test_renew_command_line_argument(self):
+        sys.argv = ['px', '--renew']
+        config, remainder = px._parse_command_line()
+        self.assertTrue(config.renew)
+
+    def test_version_command_line_argument(self):
+        sys.argv = ['px', '--version']
+        with self.assertRaises(SystemExit) as e_cm:
+            config, remainder = px._parse_command_line()
+            self.assertTrue(config.version)
+        self.assertIsInstance(e_cm.exception, SystemExit)
+
+    def test_test_command_line_argument(self):
+        sys.argv = ['px', '--test']
+        config, remainder = px._parse_command_line()
+        self.assertTrue(config.test)
+
+    def test_some_command_line_argument(self):
+        command = 'wget http://google.com'
+        sys.argv = ['px', command]
+        config, remainder = px._parse_command_line()
+        self.assertEquals(remainder, [command])
+
+    def test_mutual_exclusive_options(self):
+        sys.argv = ['px', '--init', '--renew']
+        with self.assertRaises(SystemExit) as e_cm:
+            config, remainder = px._parse_command_line()
+        self.assertIsInstance(e_cm.exception, SystemExit)
