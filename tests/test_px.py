@@ -237,7 +237,8 @@ class TestProxyExec(unittest.TestCase):
         expected_dict = {
             'http_proxy': env,
             'https_proxy': env,
-            'ftp_proxy': env}
+            'ftp_proxy': env,
+            'all_proxy': env}
 
         settings = (user, password, urlo)
         self.executor.get_proxy_settings = mock.MagicMock(
@@ -253,7 +254,8 @@ class TestProxyExec(unittest.TestCase):
         expected_dict = {
             'http_proxy': env,
             'https_proxy': env,
-            'ftp_proxy': env}
+            'ftp_proxy': env,
+            'all_proxy': env}
 
         settings = (user, password, urlo)
         self.executor.get_proxy_settings = mock.MagicMock(
@@ -305,6 +307,7 @@ class TestArgumentParser(unittest.TestCase):
         self.assertIsInstance(e_cm.exception, SystemExit)
 
     def test_test_command_line_argument(self):
+        sys.stdout = mock.MagicMock()
         sys.argv = ['px', '--test']
         config, remainder = px._parse_command_line()
         self.assertTrue(config.test)
@@ -316,6 +319,7 @@ class TestArgumentParser(unittest.TestCase):
         self.assertEquals(remainder, [command])
 
     def test_mutual_exclusive_options(self):
+        sys.stdout = mock.MagicMock()
         sys.argv = ['px', '--init', '--renew']
         with self.assertRaises(SystemExit) as e_cm:
             config, remainder = px._parse_command_line()
