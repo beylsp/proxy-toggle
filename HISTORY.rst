@@ -13,3 +13,9 @@ Unstable release
 
 First stable release
 
+1.0.3
+-----
+
+Add new positional command-line arguments: '--version', '--test'
+Add full support for python 3.x
+Set 'all_proxy' environment variable as understood by curl
