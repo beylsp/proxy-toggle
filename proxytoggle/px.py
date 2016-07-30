@@ -238,7 +238,7 @@ class ProxyExec(object):
             env = urlo.geturl()
         else:
             env = '%s://%s:%s@%s' % (urlo.scheme, user, pwd, urlo.netloc)
-        for protocol in ['http', 'https', 'ftp']:
+        for protocol in ['http', 'https', 'ftp', 'all']:
             myenv['%s_proxy' % protocol] = env
         return myenv
 
