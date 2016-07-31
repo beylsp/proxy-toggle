@@ -6,3 +6,5 @@ nose2-cov==1.0a4
 sphinx
 sphinx-rtd-theme
 tox
+
+-e git://github.com/beylsp/unisquid.git#egg=unisquid

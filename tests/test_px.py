@@ -1,12 +1,17 @@
+import base64
 import errno
 import getpass
 import mock
 import os
 import string
+import shutil
 import subprocess
 import sys
+import tempfile
+import unisquid
 import unittest
 
+from six.moves import configparser
 from six.moves import urllib
 
 from proxytoggle import px
@@ -300,6 +305,7 @@ class TestArgumentParser(unittest.TestCase):
         self.assertTrue(config.renew)
 
     def test_version_command_line_argument(self):
+        sys.stdout = mock.MagicMock()
         sys.argv = ['px', '--version']
         with self.assertRaises(SystemExit) as e_cm:
             config, remainder = px._parse_command_line()
@@ -324,3 +330,79 @@ class TestArgumentParser(unittest.TestCase):
         with self.assertRaises(SystemExit) as e_cm:
             config, remainder = px._parse_command_line()
         self.assertIsInstance(e_cm.exception, SystemExit)
+
+
+class TestFunctional(unisquid.LiveServerTestCase):
+    def setUp(self):
+        unisquid.LiveServerTestCase.setUp(self)
+
+        # copy template keyring to tempdir and update
+        # host url in px.conf with live server url
+        curdir = os.path.dirname(__file__)
+        keydir = os.path.join(curdir, 'keyring')
+        self.px_dir = tempfile.mkdtemp(dir=curdir)
+        for _file in os.listdir(keydir):
+            shutil.copy(os.path.join(keydir, _file), self.px_dir)
+        self.update_configfile()
+
+    def tearDown(self):
+        unisquid.LiveServerTestCase.tearDown(self)
+        shutil.rmtree(self.px_dir)
+
+    def update_configfile(self):
+        configfile = os.path.join(self.px_dir, 'px.conf')
+        parser = configparser.SafeConfigParser()
+        parser.read(configfile)
+        parser.set('proxy', 'host', self.live_server_url)
+        with open(configfile, 'w') as cfg:
+            parser.write(cfg)
+
+    def create_app(self):
+        def response(environ, start_response):
+            # put environment to queue
+            self.q.put(environ)
+            start_response('200 OK', [( 'Content-Type', 'text/html')])
+            return ''
+        return response
+
+    def get_proxy_auth_from_env(self, env):
+        auth = env.get('HTTP_PROXY_AUTHORIZATION', '')
+        if auth:
+            _, enc = auth.split()
+            return base64.b64decode(enc).split(':')
+        return None, None
+
+    def test_px_basic_access_auth_user(self):
+        sys.argv = ['px', 'wget', '-qO-', 'http://google.com']
+        with mock.patch('proxytoggle.px.PX_DIR', self.px_dir):
+            px.main()
+            # consume the environment from queue
+            environ = self.q.get()
+
+        user, _ = self.get_proxy_auth_from_env(environ)
+        self.assertEquals(user, 'john')
+
+    def test_px_basic_access_auth_password(self):
+        sys.argv = ['px', 'wget', '-qO-', 'http://google.com']
+        with mock.patch('proxytoggle.px.PX_DIR', self.px_dir):
+            px.main()
+            # consume the environment from queue
+            environ = self.q.get()
+
+        _, password = self.get_proxy_auth_from_env(environ)
+        self.assertEquals(password, 'doe')
+
+    def test_px_basic_access_auth_password_after_renew(self):
+        getpass.getpass = mock.MagicMock(return_value='roe')
+        sys.argv = ['px', '--renew']
+        with mock.patch('proxytoggle.px.PX_DIR', self.px_dir):
+            px.main()
+
+            sys.argv = ['px', 'wget', '-qO-', 'http://google.com']
+            px.main()
+            # consume the environment from queue
+            environ = self.q.get()
+
+        _, password = self.get_proxy_auth_from_env(environ)
+        self.assertEquals(password, 'roe')
+
