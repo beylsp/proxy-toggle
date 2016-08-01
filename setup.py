@@ -17,10 +17,11 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 
-requirements = ['gnupg']
+with open('requirements.txt') as req_file:
+    requirements = req_file.read().split('\n')
 
-
-test_requirements = []
+with open('dev-requirements.txt') as devreq_file:
+    test_requirements = devreq_file.read().split('\n')
 
 
 setup(

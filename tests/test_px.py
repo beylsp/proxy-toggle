@@ -305,7 +305,7 @@ class TestArgumentParser(unittest.TestCase):
         self.assertTrue(config.renew)
 
     def test_version_command_line_argument(self):
-        sys.stdout = mock.MagicMock()
+        sys.stderr = mock.MagicMock()
         sys.argv = ['px', '--version']
         with self.assertRaises(SystemExit) as e_cm:
             config, remainder = px._parse_command_line()
@@ -325,7 +325,7 @@ class TestArgumentParser(unittest.TestCase):
         self.assertEquals(remainder, [command])
 
     def test_mutual_exclusive_options(self):
-        sys.stdout = mock.MagicMock()
+        sys.stderr = mock.MagicMock()
         sys.argv = ['px', '--init', '--renew']
         with self.assertRaises(SystemExit) as e_cm:
             config, remainder = px._parse_command_line()
