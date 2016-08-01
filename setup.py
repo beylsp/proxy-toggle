@@ -1,4 +1,5 @@
 import proxytoggle
+import os
 
 short_description = 'A command-line tool to run programs seamlessly behind a proxy.'
 
@@ -8,21 +9,19 @@ try:
 except ImportError:
     from distutils.core import setup
 
+here = os.path.abspath(os.path.dirname(__file__))
 
-with open('README.rst') as readme_file:
+with open(os.path.join(here, 'README.rst')) as readme_file:
     readme = readme_file.read()
 
-
-with open('HISTORY.rst') as history_file:
+with open(os.path.join(here, 'HISTORY.rst')) as history_file:
     history = history_file.read()
 
-
-with open('requirements.txt') as req_file:
+with open(os.path.join(here, 'requirements.txt')) as req_file:
     requirements = req_file.read().split('\n')
 
-with open('dev-requirements.txt') as devreq_file:
+with open(os.path.join(here, 'dev-requirements.txt')) as devreq_file:
     test_requirements = devreq_file.read().split('\n')
-
 
 setup(
     name = 'proxy-toggle',
