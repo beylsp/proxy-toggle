@@ -77,6 +77,12 @@ When you want to renew your proxy password, run it with :bash:`--renew` option:
 
     $ px --renew
 
+You can clear your proxy settings with :bash:`--clear` option:
+
+.. code-block:: bash
+
+    $ px --clear
+
 
 Examples
 --------
