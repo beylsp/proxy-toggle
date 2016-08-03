@@ -359,7 +359,8 @@ class TestFunctional(unisquid.LiveServerTestCase):
 
     def tearDown(self):
         unisquid.LiveServerTestCase.tearDown(self)
-        shutil.rmtree(self.px_dir)
+        if os.path.exists(self.px_dir):
+            shutil.rmtree(self.px_dir)
 
     def update_configfile(self):
         configfile = os.path.join(self.px_dir, 'px.conf')
@@ -418,3 +419,9 @@ class TestFunctional(unisquid.LiveServerTestCase):
         _, password = self.get_proxy_auth_from_env(environ)
         self.assertEquals(password, 'roe')
 
+    def test_px_clear_proxy_settings(self):
+        sys.argv = ['px', '--clear']
+        with mock.patch('proxytoggle.px.PX_DIR', self.px_dir):
+            px.main()
+
+        self.assertFalse(os.path.exists(self.px_dir))
