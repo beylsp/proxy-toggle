@@ -110,7 +110,7 @@ class ProxyStore(object):
         try:
             fd = os.open(os.path.join(PX_DIR, '.pass'),
                          os.O_WRONLY | os.O_CREAT, 0o600)
-            with os.fdopen(fd, 'wb') as passfile:
+            with os.fdopen(fd, 'w') as passfile:
                 passfile.write(password)
         except OSError as err:
             print(err)
