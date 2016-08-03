@@ -334,6 +334,10 @@ def _parse_command_line():
                        action='store_true',
                        default=False,
                        help='Test your proxy settings.')
+    group.add_argument('--clear',
+                       action='store_true',
+                       default=False,
+                       help='Clear your proxy settings.')
     return parser.parse_known_args(sys.argv[1:])
 
 
@@ -357,6 +361,10 @@ def main():
                  'awk \'{print $3}\'']
         if _exec(False, [' | '.join(pipes)]):
             print('FAILED')
+    elif config.clear:
+        print('Clearing your proxy settings...')
+        if os.path.exists(PX_DIR):
+            shutil.rmtree(PX_DIR)
     else:
         _exec(config.nouser, sys.argv[1:])
 

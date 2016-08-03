@@ -25,4 +25,4 @@ First stable release
 
 - Add missing dependency (six) to setuptools script
 - Subprocess inherits parent's 'PATH' environment variable
-- 
+- Add new positional command-line argument: '--clear' 

@@ -324,6 +324,12 @@ class TestArgumentParser(unittest.TestCase):
         config, remainder = px._parse_command_line()
         self.assertTrue(config.test)
 
+    def test_clear_command_line_argument(self):
+        sys.stdout = mock.MagicMock()
+        sys.argv = ['px', '--clear']
+        config, remainder = px._parse_command_line()
+        self.assertTrue(config.clear)
+
     def test_some_command_line_argument(self):
         command = 'wget http://google.com'
         sys.argv = ['px', command]
