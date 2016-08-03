@@ -232,7 +232,7 @@ class ProxyExec(object):
         Returns:
           Dictionary with environment variables.
         """
-        myenv = {}
+        myenv = {'PATH': os.environ.get('PATH', '')}
         user, pwd, urlo = self.get_proxy_settings()
         if nouser:
             env = urlo.geturl()

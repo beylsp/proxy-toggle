@@ -235,11 +235,14 @@ class TestProxyExec(unittest.TestCase):
         self.executor = ProxyExec.__new__(ProxyExec)
 
     def test_env_returns_correct_environment(self):
+        path = '/usr/local/sbin'
         user = 'john'
         password = 'doe'
+        os.environ.get = mock.MagicMock(return_value=path)
         urlo = urllib.parse.urlparse('http://corporate.proxy.com')
         env = 'http://john:doe@corporate.proxy.com'
         expected_dict = {
+            'PATH': path,
             'http_proxy': env,
             'https_proxy': env,
             'ftp_proxy': env,
@@ -252,11 +255,14 @@ class TestProxyExec(unittest.TestCase):
         self.assertEquals(self.executor.env(), expected_dict)
 
     def test_env_nouser_returns_correct_environment(self):
+        path = '/usr/local/sbin'
         user = 'john'
         password = 'doe'
+        os.environ.get = mock.MagicMock(return_value=path)
         urlo = urllib.parse.urlparse('http://corporate.proxy.com')
         env = 'http://corporate.proxy.com'
         expected_dict = {
+            'PATH': path,
             'http_proxy': env,
             'https_proxy': env,
             'ftp_proxy': env,
