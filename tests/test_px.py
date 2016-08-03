@@ -330,6 +330,18 @@ class TestArgumentParser(unittest.TestCase):
         config, remainder = px._parse_command_line()
         self.assertTrue(config.clear)
 
+    def test_extra_proxy_daemon_command_line_argument(self):
+        sys.stdout = mock.MagicMock()
+        sys.argv = ['px', '--extra-proxy-daemon']
+        config, remainder = px._parse_command_line()
+        self.assertTrue(config.extra_proxy_daemon)
+
+    def test_extra_proxy_daemon_short_command_line_argument(self):
+        sys.stdout = mock.MagicMock()
+        sys.argv = ['px', '-x']
+        config, remainder = px._parse_command_line()
+        self.assertTrue(config.extra_proxy_daemon)
+
     def test_some_command_line_argument(self):
         command = 'wget http://google.com'
         sys.argv = ['px', command]
