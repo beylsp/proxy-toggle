@@ -369,7 +369,7 @@ class TestFunctional(unisquid.LiveServerTestCase):
         auth = env.get('HTTP_PROXY_AUTHORIZATION', '')
         if auth:
             _, enc = auth.split()
-            return base64.b64decode(enc.decode('utf-8')).split(':')
+            return base64.b64decode(enc).decode('utf-8').split(':')
         return None, None
 
     def test_px_basic_access_auth_user(self):
