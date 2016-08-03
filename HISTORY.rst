@@ -19,3 +19,10 @@ First stable release
 - Add new positional command-line arguments: '--version', '--test'
 - Add full support for python 3.x
 - Set 'all_proxy' environment variable as understood by curl
+
+1.0.4
+-----
+
+- Add missing dependency (six) to setuptools script
+- Subprocess inherits parent's 'PATH' environment variable
+- 
