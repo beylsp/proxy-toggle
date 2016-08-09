@@ -338,10 +338,6 @@ def _parse_command_line():
                        action='store_true',
                        default=False,
                        help='Clear your proxy settings.')
-    group.add_argument('-x', '--extra-proxy-daemon',
-                       action='store_true',
-                       default=False,
-                       help='Launch proxy daemon.')
     return parser.parse_known_args(sys.argv[1:])
 
 
