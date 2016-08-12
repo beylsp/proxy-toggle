@@ -25,4 +25,9 @@ First stable release
 
 - Add missing dependency (six) to setuptools script
 - Subprocess inherits parent's 'PATH' environment variable
-- Add new positional command-line argument: '--clear' 
+- Add new positional command-line argument: '--clear'
+
+1.0.5
+-----
+
+- Bugfix: no error reported when 'px --test' fails

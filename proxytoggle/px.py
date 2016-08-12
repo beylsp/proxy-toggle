@@ -296,6 +296,9 @@ class ProxyExec(object):
           nouser: boolean, whether or not to provide user name/password
             to proxy host.
           cmd: string, shell command to be executed.
+
+        Returns:
+          return code of the executed command.
         """
         if nouser:
             cmd = cmd[1:]
@@ -355,12 +358,12 @@ def main():
         init_proxy_store(config.renew)
     elif config.test:
         print('Testing your proxy settings...')
+        status = 'OK'
         test_url = 'http://httpbin.org'
-        pipes = ['wget --spider -S -t 1 -T 15 %s 2>&1' % test_url,
-                 'grep "HTTP/"',
-                 'awk \'{print $3}\'']
+        pipes = ['wget --spider -S -t 1 -T 15 %s >/dev/null 2>&1' % test_url]
         if _exec(False, [' | '.join(pipes)]):
-            print('FAILED')
+            status = 'FAILED'
+        print(status)
     elif config.clear:
         print('Clearing your proxy settings...')
         if os.path.exists(PX_DIR):
