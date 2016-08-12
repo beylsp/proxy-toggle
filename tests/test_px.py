@@ -371,10 +371,12 @@ class TestFunctional(unisquid.LiveServerTestCase):
             parser.write(cfg)
 
     def create_app(self):
+        self.http_status_mock = '200 OK'
         def response(environ, start_response):
             # put environment to queue
             self.q.put(environ)
-            start_response('200 OK', [( 'Content-Type', 'text/html')])
+            start_response(self.http_status_mock,
+                           [( 'Content-Type', 'text/html')])
             return ''
         return response
 
@@ -425,3 +427,16 @@ class TestFunctional(unisquid.LiveServerTestCase):
             px.main()
 
         self.assertFalse(os.path.exists(self.px_dir))
+
+    def test_px_test_ok(self):
+        with mock.patch('proxytoggle.px.PX_DIR', self.px_dir):
+            status = px.test()
+
+        self.assertEquals(status, 'OK')
+
+    def test_px_test_failed(self):
+        self.http_status_mock = '407 Proxy Authentication Required'
+        with mock.patch('proxytoggle.px.PX_DIR', self.px_dir):
+            status = px.test()
+
+        self.assertEquals(status, 'FAILED')

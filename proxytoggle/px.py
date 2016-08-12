@@ -352,17 +352,22 @@ init_proxy_store = ProxyStore
 _exec = ProxyExec()
 
 
+def test():
+    print('Testing your proxy settings...')
+    status = 'OK'
+    test_url = 'http://httpbin.org'
+    pipes = ['wget --spider -S -t 1 -T 15 %s >/dev/null 2>&1' % test_url]
+    if _exec(False, [' | '.join(pipes)]):
+        status = 'FAILED'
+    return status
+
+
 def main():
     config, _ = _parse_command_line()
     if config.init or config.renew:
         init_proxy_store(config.renew)
     elif config.test:
-        print('Testing your proxy settings...')
-        status = 'OK'
-        test_url = 'http://httpbin.org'
-        pipes = ['wget --spider -S -t 1 -T 15 %s >/dev/null 2>&1' % test_url]
-        if _exec(False, [' | '.join(pipes)]):
-            status = 'FAILED'
+        status = test()
         print(status)
     elif config.clear:
         print('Clearing your proxy settings...')
