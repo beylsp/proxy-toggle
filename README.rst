@@ -1,15 +1,21 @@
 ************
 proxy-toggle
 ************
+.. image:: https://img.shields.io/pypi/v/proxy-toggle.svg
+    :target: https://pypi.python.org/pypi/proxy-toggle
+    :alt: PyPi Version
 
 .. image:: https://travis-ci.org/beylsp/proxy-toggle.svg?branch=master
     :target: https://travis-ci.org/beylsp/proxy-toggle
+    :alt: Build Status
 
 .. image:: https://coveralls.io/repos/github/beylsp/proxy-toggle/badge.svg?branch=master
      :target: https://coveralls.io/github/beylsp/proxy-toggle?branch=master
+     :alt: Coverage report
 
 .. image:: https://readthedocs.org/projects/proxy-toggle/badge
       :target: https://proxy-toggle.readthedocs.io/en/latest/
+      :alt: Documentation
 
 A command-line tool to run programs seamlessly behind a proxy.
 
