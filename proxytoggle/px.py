@@ -72,8 +72,7 @@ class ProxyStore(object):
             gpg = gnupg.GPG(homedir=PX_DIR)
         except RuntimeError as err:
             print('Error initializing keyring.')
-            print(err)
-            sys.exit(err.errno)
+            sys.exit(err)
         else:
             passphrase = self._passphrase()
             key = self._generate_key(gpg, passphrase)
@@ -88,8 +87,7 @@ class ProxyStore(object):
             gpg = gnupg.GPG(homedir=PX_DIR)
         except RuntimeError as err:
             print('Error renewing password. Try to run "px --init".')
-            print(err)
-            sys.exit(err.errno)
+            sys.exit(err)
         else:
             keys = gpg.list_keys()
             if not keys:
