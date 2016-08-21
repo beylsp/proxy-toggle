@@ -17,6 +17,10 @@ proxy-toggle
       :target: https://proxy-toggle.readthedocs.io/en/latest/
       :alt: Documentation
 
+.. image:: https://requires.io/github/beylsp/proxy-toggle/requirements.svg?branch=master
+     :target: https://requires.io/github/beylsp/proxy-toggle/requirements/?branch=master
+     :alt: Requirements Status
+
 A command-line tool to run programs seamlessly behind a proxy.
 
 Introduction
