@@ -84,7 +84,7 @@ class ProxyStore(object):
     def _renew_app(self):
         """Renew proxy application with new password."""
         try:
-            gpg = gnupg.GPG(gnupghome=PX_DIR)
+            gpg = gnupg.GPG(homedir=PX_DIR)
         except RuntimeError as err:
             print('Error renewing password. Try to run "px --init".')
             sys.exit(err)
@@ -258,7 +258,7 @@ class ProxyExec(object):
             print('No passfile found. Please run "px --init" first.')
             sys.exit(err.errno)
         else:
-            gpg = gnupg.GPG(gnupghome=PX_DIR)
+            gpg = gnupg.GPG(homedir=PX_DIR)
             return str(gpg.decrypt(password, passphrase=passphrase))
 
     def get_proxy_settings(self):

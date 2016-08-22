@@ -35,4 +35,3 @@ First stable release
 1.0.6
 -----
 - Fix #1: Raise SystemExit with error message when RuntimeError occurs as it doesn't have errno attribute
-- Update gnupg dependency: python-gnupg instead of outdated gnupg
