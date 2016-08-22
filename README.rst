@@ -34,7 +34,7 @@ Many corporate networks use proxies both for network protection and to cache oft
 Deployment Requirements
 -------------------------
 
-In order to use this module you need to have access to a compatible version of the :bash:`GnuPG` executable. On a Linux platform, this will typically be installed via your distribution's package manager (e.g. :bash:`apt-get` on Debian/Ubuntu). Windows binaries are available `here <ftp://ftp.gnupg.org/gcrypt/binary>`_ - use one of the :bash:`gnupg-w32cli-1.4.x.exe` installers for the simplest deployment options.
+In order to use this module you need to have access to a compatible version of the :bash:`GnuPG` executable. On a Linux platform, this will typically be installed via your distribution's package manager (e.g. :bash:`apt-get` on Debian/Ubuntu). Windows binaries are available `here <ftp.gnupg.org/gcrypt/binary>`_ - use one of the :bash:`gnupg-w32cli-1.4.x.exe` installers for the simplest deployment options.
 
 Installation
 ------------
