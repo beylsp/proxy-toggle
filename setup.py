@@ -28,6 +28,7 @@ setup(
     description = short_description,
     long_description = readme + '\n\n' + history,
     author = "Patrik Beyls",
+    documentation = "http://proxy-toggle.readthedocs.io/en/stable/",
     url = 'https://github.com/beylsp/proxy-toggle',
     packages = [
         'proxytoggle',
