@@ -1,2 +1,2 @@
-python-gnupg
+gnupg
 six
