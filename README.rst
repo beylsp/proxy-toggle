@@ -28,6 +28,11 @@ Introduction
 
 Many corporate networks use proxies both for network protection and to cache often-used content. This command-line tool allows you to run programs behind a corporate proxy without the need to constantly set/unset proxy environment variables. It sets the environment variables only when needed and unsets them whenever the program finished its execution. Currently, proxy-toggle only supports *Basic Access Authentication* as the authentication scheme to the proxy.
 
+Installation Requirements
+-------------------------
+
+In order to use this module you need to have access to a compatible version of the :bash:`GnuPG` executable. On a Linux platform, this will typically be installed via your distribution's package manager (e.g. :bash:`apt-get` on Debian/Ubuntu). Windows binaries are available `here <ftp://ftp.gnupg.org/gcrypt/binary>`_ - use one of the :bash:`gnupg-w32cli-1.4.x.exe` installers for the simplest deployment options.
+
 Installation
 ------------
 

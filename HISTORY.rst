@@ -31,3 +31,8 @@ First stable release
 -----
 
 - Bugfix: no error reported when 'px --test' fails
+
+1.0.6
+-----
+- Fix #1: Raise SystemExit with error message when RuntimeError occurs as it doesn't have errno attribute
+- Update gnupg dependency: python-gnupg instead of outdated gnupg
