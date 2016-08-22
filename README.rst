@@ -21,6 +21,9 @@ proxy-toggle
      :target: https://requires.io/github/beylsp/proxy-toggle/requirements/?branch=master
      :alt: Requirements Status
 
+.. role:: bash(code)
+   :language: bash
+
 A command-line tool to run programs seamlessly behind a proxy.
 
 Introduction
@@ -76,9 +79,6 @@ After successful initialization, run:
 .. code-block:: bash
 
     $ px <program>
-
-.. role:: bash(code)
-   :language: bash
 
 If your proxy doesn't require user authentication, run it with :bash:`--nouser` option:
 

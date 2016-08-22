@@ -3,6 +3,9 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. role:: bash(code)
+   :language: bash
+
 Welcome to proxy-toggle's documentation!
 ========================================
 
@@ -58,9 +61,6 @@ After successful initialization, run:
 .. code-block:: bash
 
     $ px <program>
-
-.. role:: bash(code)
-   :language: bash
 
 If your proxy doesn't require user authentication, run it with :bash:`--nouser` option:
 
