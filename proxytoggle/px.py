@@ -69,7 +69,7 @@ class ProxyStore(object):
         host, user, password = self._get_user_input()
 
         try:
-            gpg = gnupg.GPG(gnupghome=PX_DIR)
+            gpg = gnupg.GPG(homedir=PX_DIR)
         except RuntimeError as err:
             print('Error initializing keyring.')
             sys.exit(err)
