@@ -35,3 +35,7 @@ First stable release
 1.0.6
 -----
 - Fix #1: Raise SystemExit with error message when RuntimeError occurs as it doesn't have errno attribute
+
+1.0.7
+-----
+- Bugfix: fix argument name passed to gnupg constructor
